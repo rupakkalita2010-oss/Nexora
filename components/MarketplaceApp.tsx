@@ -51,6 +51,7 @@ export function MarketplaceApp() {
   const [authPassword, setAuthPassword] = useState("");
   const [authName, setAuthName] = useState(""); // Needed for signup
   const [search, setSearch] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   
   // --- UPLOAD STATES ---
   const [title, setTitle] = useState("");
@@ -282,7 +283,15 @@ setCartOpen(false);
         
         <nav className="side-links" aria-label="Marketplace navigation">
           <NavItem icon={<LayoutDashboard size={18} />} label="Home" active={activeView === "home" && selectedCategory === "All"} onClick={() => goHome()} />
-          <NavItem icon={<Search size={18} />} label="Browse" active={activeView === "home" && selectedCategory !== "All"} onClick={() => goHome()} />
+          <NavItem
+  icon={<Search size={18} />}
+  label="Browse"
+  active={activeView === "home" && selectedCategory !== "All"}
+  onClick={() => {
+    goHome();
+    setTimeout(() => searchInputRef.current?.focus(), 100);
+  }}
+/>
           <NavItem icon={<Sparkles size={18} />} label="Categories" onClick={() => document.getElementById("categories")?.scrollIntoView({ behavior: "smooth" })} />
           <NavItem icon={<Bookmark size={18} />} label="Collections" onClick={() => { setSelectedCategory("Templates"); goHome("Templates"); }} />
           <NavItem icon={<Heart size={18} />} label="Wishlist" badge={liked.length || undefined} onClick={() => { 
@@ -317,7 +326,15 @@ setCartOpen(false);
 /></button>
           <label className="search-box" aria-label="Search design assets">
             <Search size={19} />
-            <input value={search} onChange={(event) => { setSearch(event.target.value); setActiveView("home"); }} placeholder="Search templates, logos, UI kits…" />
+          <input
+  ref={searchInputRef}
+  value={search}
+  onChange={(event) => {
+    setSearch(event.target.value);
+    setActiveView("home");
+  }}
+  placeholder="Search templates, logos, UI kits…"
+/>
             <kbd>⌘ K</kbd>
           </label>
           <nav className="header-links">
