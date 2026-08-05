@@ -285,14 +285,30 @@ setCartOpen(false);
           <NavItem icon={<LayoutDashboard size={18} />} label="Home" active={activeView === "home" && selectedCategory === "All"} onClick={() => goHome()} />
           <NavItem
   icon={<Search size={18} />}
-  label="Browse"
+  label="Search"
   active={activeView === "home" && selectedCategory !== "All"}
   onClick={() => {
     goHome();
     setTimeout(() => searchInputRef.current?.focus(), 100);
   }}
 />
-          <NavItem icon={<Sparkles size={18} />} label="Categories" onClick={() => document.getElementById("categories")?.scrollIntoView({ behavior: "smooth" })} />
+          <NavItem
+  icon={<Sparkles size={18} />}
+  label="Categories"
+  active={activeView === "home"}
+  onClick={() => {
+    goHome("All");
+
+    setTimeout(() => {
+      document
+        .getElementById("categories")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+    }, 100);
+  }}
+/>
           <NavItem icon={<Bookmark size={18} />} label="Collections" onClick={() => { setSelectedCategory("Templates"); goHome("Templates"); }} />
           <NavItem icon={<Heart size={18} />} label="Wishlist" badge={liked.length || undefined} onClick={() => { 
             if (!user) return setAuthOpen(true);

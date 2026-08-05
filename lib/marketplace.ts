@@ -82,7 +82,7 @@ export const products: Product[] = [
   },
   {
     id: "4",
-    title: "Alpine Logo Collection",
+    title: "Alpine Logo Browser",
     category: "Logo",
     creator: "North & Co.",
     initials: "NC",
