@@ -301,7 +301,7 @@ setCartOpen(false);
 
     setTimeout(() => {
       document
-        .getElementById("categories")
+        .getElementById("browser")
         ?.scrollIntoView({
           behavior: "smooth",
           block: "start",
@@ -309,7 +309,7 @@ setCartOpen(false);
     }, 100);
   }}
 />
-          <NavItem icon={<Bookmark size={18} />} label="Collections" onClick={() => { setSelectedCategory("Templates"); goHome("Templates"); }} />
+          <NavItem icon={<Bookmark size={18} />} label="Browser" onClick={() => { setSelectedCategory("Templates"); goHome("Templates"); }} />
           <NavItem icon={<Heart size={18} />} label="Wishlist" badge={liked.length || undefined} onClick={() => { 
             if (!user) return setAuthOpen(true);
             setSearch(""); setActiveView("profile"); 
