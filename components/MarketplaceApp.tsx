@@ -292,23 +292,7 @@ setCartOpen(false);
     setTimeout(() => searchInputRef.current?.focus(), 100);
   }}
 />
-          <NavItem
-  icon={<Sparkles size={18} />}
-  label="Categories"
-  active={activeView === "home"}
-  onClick={() => {
-    goHome("All");
-
-    setTimeout(() => {
-      document
-        .getElementById("browser")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-    }, 100);
-  }}
-/>
+         
           <NavItem icon={<Bookmark size={18} />} label="Browser" onClick={() => { setSelectedCategory("Templates"); goHome("Templates"); }} />
           <NavItem icon={<Heart size={18} />} label="Wishlist" badge={liked.length || undefined} onClick={() => { 
             if (!user) return setAuthOpen(true);
