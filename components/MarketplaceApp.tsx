@@ -403,13 +403,6 @@ setCartOpen(false);
                   </div>
                 </div>
                 
-                <div className="filter-pills">
-                  <button className={selectedCategory === "All" ? "active" : ""} onClick={() => setSelectedCategory("All")}>All work</button>
-                  {categories.slice(0, 6).map((category) => (
-                    <button key={category.name} className={selectedCategory === category.name ? "active" : ""} onClick={() => setSelectedCategory(category.name)}>{category.name}</button>
-                  ))}
-                </div>
-                
                 {filteredProducts.length ? (
                   <div className="product-grid">
                     {filteredProducts.map((product) => (
