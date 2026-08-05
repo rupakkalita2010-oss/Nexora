@@ -49,7 +49,7 @@ export const products: Product[] = [
   },
   {
     id: "2",
-    title: "Gradient Social Collection",
+    title: "Gradient Social Browser",
     category: "Social Media",
     creator: "Sasha Rowe",
     initials: "SR",
@@ -94,7 +94,7 @@ export const products: Product[] = [
     tags: ["Logo", "Vector", "Outdoors"],
     art: "alpine",
     description:
-      "A premium collection of 24 refined marks for outdoors, hospitality and adventure brands.",
+      "A premium Browser of 24 refined marks for outdoors, hospitality and adventure brands.",
   },
   {
     id: "5",
