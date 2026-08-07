@@ -293,7 +293,7 @@ setCartOpen(false);
   }}
 />
       
-          <NavItem icon={<Bookmark size={18} />} label="Browser" onClick={() => { setSelectedCategory("Templates"); goHome("Templates"); }} />
+         
           <NavItem icon={<Heart size={18} />} label="Wishlist" badge={liked.length || undefined} onClick={() => { 
             if (!user) return setAuthOpen(true);
             setSearch(""); setActiveView("profile"); 
