@@ -48,22 +48,6 @@ export const products: Product[] = [
     badge: "Bestseller",
   },
   {
-    id: "2",
-    title: "Gradient Social Browser",
-    category: "Social Media",
-    creator: "Sasha Rowe",
-    initials: "SR",
-    price: 12,
-    rating: 4.8,
-    reviews: 94,
-    likes: 619,
-    downloads: 870,
-    tags: ["Canva", "Instagram", "Social"],
-    art: "gradient",
-    description:
-      "Thirty polished social templates that make your next campaign look art-directed in minutes.",
-  },
-  {
     id: "3",
     title: "300+ Precision Icons",
     category: "Icons",
@@ -80,22 +64,7 @@ export const products: Product[] = [
       "A clean, consistent icon system for modern interfaces. Fully editable vector files included.",
     badge: "Popular",
   },
-  {
-    id: "4",
-    title: "Alpine Logo Browser",
-    category: "Logo",
-    creator: "North & Co.",
-    initials: "NC",
-    price: 29,
-    rating: 4.9,
-    reviews: 312,
-    likes: 979,
-    downloads: 690,
-    tags: ["Logo", "Vector", "Outdoors"],
-    art: "alpine",
-    description:
-      "A premium Browser of 24 refined marks for outdoors, hospitality and adventure brands.",
-  },
+ 
   {
     id: "5",
     title: "Editorial Story Pack",
