@@ -1,4 +1,4 @@
-# Designora marketplace
+# Nexora marketplace
 
 The completed Next.js project is in the folder one level above this guide.
 
