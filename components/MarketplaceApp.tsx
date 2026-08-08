@@ -123,11 +123,11 @@ useEffect(() => {
     )
     .filter((product) => product.price <= priceLimit)
     .filter((product) =>
-      `${product.title}
-       ${product.category}
-       ${product.creator}
-       ${product.description}
-       ${product.tags.join(" ")}`
+      `₹{product.title}
+       ₹{product.category}
+       ₹{product.creator}
+       ₹{product.description}
+       ₹{product.tags.join(" ")}`
         .toLowerCase()
         .includes(search.trim().toLowerCase())
     )
@@ -153,7 +153,7 @@ const addToCart = async (product: Product) => {
       setCart((items) => [...items, product]);
     }
 
-    showToast(`${product.title} added to your cart.`);
+    showToast(`₹{product.title} added to your cart.`);
   } catch (error: any) {
     console.error(error);
 
@@ -269,7 +269,7 @@ setCartOpen(false);
 
   return (
     <main className="marketplace-shell">
-      <aside className={`side-nav ${menuOpen ? "side-nav-open" : ""}`}>
+      <aside className={`side-nav ₹{menuOpen ? "side-nav-open" : ""}`}>
         <div className="mobile-close">
           <button className="icon-button" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={19} /></button>
         </div>
@@ -372,7 +372,7 @@ setCartOpen(false);
                 <div className="section-title-row catalog-title">
                   <div>
                     <p className="eyebrow">Made to move work forward</p>
-                    <h2>{selectedCategory === "All" ? "Trending now." : `${selectedCategory} picks.`}</h2>
+                    <h2>{selectedCategory === "All" ? "Trending now." : `₹{selectedCategory} picks.`}</h2>
                     <p className="muted">Premium files, clear licences, no guesswork.</p>
                   </div>
                   <div className="catalog-actions">
@@ -470,7 +470,7 @@ setCartOpen(false);
       items.filter((product) => product.id !== item.id)
     );
 
-    showToast(`${item.title} removed from cart.`);
+    showToast(`₹{item.title} removed from cart.`);
   }}
 >
   <X size={17} />
@@ -546,7 +546,7 @@ setCartOpen(false);
 
     <div className="checkout-line">
       <span>Platform Fee</span>
-      <strong>$0</strong>
+      <strong>₹0</strong>
     </div>
 
     <hr />
@@ -720,7 +720,7 @@ razorpay.open();
     </label>
 
     <label>
-      Price ($)
+      Price (₹)
       <input
         type="number"
         min="1"
@@ -833,7 +833,7 @@ function ProfileView({ user, orders, liked, onOpen, onDownload }: { user: any; o
       ) : (
         <div className="purchase-list">
           {orders.map((product, index) => (
-            <article key={`${product.id}-${index}`}>
+            <article key={`₹{product.id}-₹{index}`}>
               <ProductArt product={product} />
               <div><h3>{product.title}</h3><p>by {product.creator}</p></div>
              <button
