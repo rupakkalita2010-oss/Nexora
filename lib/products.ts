@@ -53,7 +53,9 @@ export async function addProduct(product: {
   description: string;
   imageFile: File | null;
 downloadFile: File | null;
-}) {
+})
+
+{
   let imageUrl = "";
   let downloadUrl = "";
 
@@ -134,6 +136,29 @@ downloadFile: File | null;
   }
 
   return data;
+}
+export async function deleteProduct(productId: string) {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error("You must be logged in.");
+  }
+
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("id", productId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("Delete product error:", error);
+    throw error;
+  }
+
+  return true;
 }
 
 /* ===========================
