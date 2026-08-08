@@ -1,6 +1,7 @@
 export type Product = {
   cart_id?: number;
   id: string;
+  user_id?: string;
   title: string;
   category: string;
   creator: string;

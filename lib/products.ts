@@ -14,6 +14,7 @@ export async function getProducts() {
 
   return data.map((item): Product => ({
     id: item.id,
+    user_id: item.user_id,
     title: item.title,
     category: item.category,
 
@@ -147,15 +148,20 @@ export async function deleteProduct(productId: string) {
     throw new Error("You must be logged in.");
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("products")
     .delete()
     .eq("id", productId)
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .select("id");
 
   if (error) {
     console.error("Delete product error:", error);
     throw error;
+  }
+
+  if (!data || data.length === 0) {
+    throw new Error("Product was not deleted.");
   }
 
   return true;

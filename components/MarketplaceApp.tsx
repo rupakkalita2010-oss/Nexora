@@ -11,6 +11,7 @@ import { categories, formatCurrency, type Product } from "@/lib/marketplace";
 import {
   getProducts,
   addProduct,
+  deleteProduct,
   addToCart as addToCartDB,
   getCart,
   removeFromCart,
@@ -405,7 +406,23 @@ setCartOpen(false);
             </motion.div>
           )}
           
-          {activeView === "profile" && user && <ProfileView key="profile" user={user} orders={orders} liked={liked} onOpen={setProductOpen}onDownload={async (product) => {
+          {activeView === "profile" && user && (
+  <ProfileView
+    key="profile"
+    user={user}
+    orders={orders}
+    liked={liked}
+    products={dbProducts}
+    onOpen={setProductOpen}
+    showToast={showToast}
+    onDelete={async (productId) => {
+ 
+  setDbProducts((current) =>
+    current.filter((product) => product.id !== productId)
+  );
+  showToast("Design deleted successfully.");
+}}  
+    onDownload={async (product) => {
   if (!product.download_url) {
     showToast("Download file not found.");
     return;
@@ -438,7 +455,8 @@ setCartOpen(false);
     showToast("Unable to download file.");
   }
 }}
-/>}
+/>
+          )}
           {activeView === "seller" && user && <SellerView key="seller" user={user} onUpload={() => setUploadOpen(true)} onMessage={() => setActiveView("messages")} />}
           {activeView === "messages" && user && <MessagesView key="messages" chat={chat} message={message} onChange={setMessage} onSend={sendMessage} />}
         </AnimatePresence>
@@ -794,6 +812,43 @@ razorpay.open();
     </button>
   </form>
 </Modal>
+     <Modal
+  isOpen={Boolean(productOpen)}
+  onClose={() => setProductOpen(null)}
+  className="product-modal"
+>
+  {productOpen && (
+    <div className="product-detail">
+      <ProductArt product={productOpen} />
+
+      <div className="detail-copy">
+  <p className="product-category">{productOpen.category}</p>
+        <h2>{productOpen.title}</h2>
+
+        <p>by {productOpen.creator}</p>
+
+        <strong>
+          {formatCurrency(productOpen.price)}
+        </strong>
+
+        <p className="modal-subtitle">
+          {productOpen.description}
+        </p>
+
+        <button
+          type="button"
+          className="button-gradient full-button"
+          onClick={() => {
+            addToCart(productOpen);
+            setProductOpen(null);
+          }}
+        >
+          Add to cart <ShoppingBag size={17} />
+        </button>
+      </div>
+    </div>
+  )}
+</Modal>
       <AnimatePresence>{toast ? <motion.div className="toast" initial={{ opacity: 0, y: 18, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16 }}><Check size={17} /> {toast}</motion.div> : null}</AnimatePresence>
     </main>
   );
@@ -805,7 +860,31 @@ function NavItem({ icon, label, onClick, active = false, badge }: { icon: React.
   return <button type="button" className={active ? "active" : ""} onClick={onClick}>{icon}<span>{label}</span>{badge ? <i>{badge}</i> : null}</button>;
 }
 
-function ProfileView({ user, orders, liked, onOpen, onDownload }: { user: any; orders: Product[]; liked: string[]; onOpen: (product: Product) => void; onDownload: (product: Product) => void }) { const [menuOpen, setMenuOpen] = useState<number | null>(null);
+function ProfileView({
+  user,
+  orders,
+  liked,
+  products,
+  onOpen,
+  onDownload,
+  onDelete,
+  showToast,
+}: {
+  user: any;
+  orders: Product[];
+  liked: string[];
+  products: Product[];
+  onOpen: (product: Product) => void;
+  onDownload: (product: Product) => void;
+  onDelete: (productId: string) => Promise<void>;
+  showToast: (message: string) => void;
+})  {
+  const myDesigns = products.filter(
+    (product) => product.user_id === user.id
+  );
+ const [menuOpen, setMenuOpen] = useState<number | null>(null);
+ const [showMyDesigns, setShowMyDesigns] = useState(false);
+ <Metric value={myDesigns.length.toString()} label="My Designs" />
   return (
     <motion.section className="dashboard-page" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
       <div className="profile-banner"><div className="profile-orb orb-a" /><div className="profile-orb orb-b" /></div>
@@ -822,8 +901,86 @@ function ProfileView({ user, orders, liked, onOpen, onDownload }: { user: any; o
       <div className="profile-metrics">
         <Metric value={orders.length.toString()} label="Downloads" />
         <Metric value={liked.length.toString()} label="Wishlist items" />
+        <button
+  type="button"
+  className="metric"
+  onClick={() => setShowMyDesigns(true)}
+>
+  <span>My Designs</span>
+  <strong>{myDesigns.length}</strong>
+</button>
       </div>
-      
+      {showMyDesigns && (
+  <section>
+    <div className="dashboard-heading">
+      <div>
+        <p className="eyebrow">Your work</p>
+        <h2>My Designs</h2>
+      </div>
+
+      <button
+        className="text-button"
+        onClick={() => setShowMyDesigns(false)}
+      >
+        Back
+      </button>
+    </div>
+
+    {myDesigns.length === 0 ? (
+      <div className="empty-state">
+        You haven't uploaded any designs yet.
+      </div>
+    ) : (
+      <div className="purchase-list">
+        {myDesigns.map((product) => (
+          <article key={product.id}>
+            <ProductArt product={product} />
+
+            <div>
+              <h3>{product.title}</h3>
+              <p>by {product.creator}</p>
+              <strong>{formatCurrency(product.price)}</strong>
+            </div>
+
+           <div style={{ display: "flex", gap: "8px" }}>
+ <button
+  type="button"
+  className="button-secondary slim"
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onOpen(product);
+  }}
+>
+  <Eye size={16} />
+  View
+</button>
+  <button
+    className="button-secondary slim"
+    onClick={async () => {
+      const confirmed = window.confirm(
+        `Delete "${product.title}" from your designs?`
+      );
+
+      if (!confirmed) return;
+
+      try {
+        await onDelete(product.id);
+    } catch (error) {
+  console.error(error);
+  showToast("Could not delete the design.");
+}
+    }}
+  >
+    Delete
+  </button>
+</div>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+)}
       <div className="dashboard-heading">
         <div><p className="eyebrow">Your library</p><h2>Purchased designs</h2></div>
       </div>
@@ -833,7 +990,7 @@ function ProfileView({ user, orders, liked, onOpen, onDownload }: { user: any; o
       ) : (
         <div className="purchase-list">
           {orders.map((product, index) => (
-            <article key={`₹{product.id}-₹{index}`}>
+            <article key={`${product.id}-${index}`}>
               <ProductArt product={product} />
               <div><h3>{product.title}</h3><p>by {product.creator}</p></div>
              <button
