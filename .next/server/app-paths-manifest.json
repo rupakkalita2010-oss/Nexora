@@ -1,3 +1,5 @@
 {
+  "/api/create-order/route": "app/api/create-order/route.js",
+  "/api/verify-payment/route": "app/api/verify-payment/route.js",
   "/page": "app/page.js"
 }

@@ -18,14 +18,26 @@ export async function POST(req: Request) {
 
     const isValid = expectedSignature === razorpay_signature;
 
-    if (!isValid) {
-      return NextResponse.json(
-        { success: false },
-        { status: 400 }
-      );
-    }
+   if (!isValid) {
+  console.log("PAYMENT VERIFICATION FAILED");
+  console.log("Order ID:", razorpay_order_id);
+  console.log("Payment ID:", razorpay_payment_id);
+  console.log("Received signature:", razorpay_signature);
+  console.log("Expected signature:", expectedSignature);
 
-    return NextResponse.json({ success: true });
+  return NextResponse.json(
+    {
+      success: false,
+      reason: "Signature mismatch",
+    },
+    { status: 400 }
+  );
+}
+
+    return NextResponse.json({
+  success: true,
+  verified: isValid,
+});
   } catch (error) {
     return NextResponse.json(
       { success: false },
